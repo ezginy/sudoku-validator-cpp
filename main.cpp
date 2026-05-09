@@ -30,12 +30,14 @@ int main() {
                 // Check if the number is between 1 and 9
                 if (rowNumber < 1 || rowNumber > 9) {
                     cout<<"Invalid number in row "<<i+1<<endl;
+                    cout << "Invalid Sudoku" << endl;
                     return 1;
                 }
 
                 // Check if the number already exists
                 if (rowUsed[rowNumber]) {
                     cout<<"Duplicate number in row "<<i+1<<endl;
+                    cout << "Invalid Sudoku" << endl;
                     return 1;
                 }
 
@@ -54,13 +56,15 @@ int main() {
 
                 // Check if the number is between 1 and 9
                 if (columnNumber < 1 || columnNumber > 9) {
-                    cout<<"Invalid number in column "<<j+1<<endl;
+                    cout<<"Invalid number in column "<<i+1<<endl;
+                    cout << "Invalid Sudoku" << endl;
                     return 1;
                 }
 
                 // Check if the number already exists
                 if (columnUsed[columnNumber]) {
-                    cout<<"Duplicate number in column "<<j+1<<endl;
+                    cout<<"Duplicate number in column "<<i+1<<endl;
+                    cout << "Invalid Sudoku" << endl;
                     return 1;
                 }
 
@@ -68,9 +72,44 @@ int main() {
                 columnUsed[columnNumber] = true;
             }
         }
+
+        // Validate each 3x3 subgrid
+        for (int row = 0; row < 9; row += 3) {
+            for (int col = 0; col < 9; col += 3) {
+
+                bool subgridUsed[10] = {false};
+
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+
+                        int subgridNumber = sudoku[row + i][col + j];
+
+                        // Check if the number is between 1 and 9 in 3x3 subgrid
+                        if (subgridNumber < 1 || subgridNumber > 9) {
+                            cout<<"Invalid number in 3x3 subgrid "<<endl;
+                            cout << "Invalid Sudoku" << endl;
+                            return 1;
+                        }
+
+                        // Check if the number already exists in 3x3 subgrid
+                        if (subgridUsed[subgridNumber]) {
+                            cout<<"Duplicate number in 3x3 subgrid "<<endl;
+                            cout << "Invalid Sudoku" << endl;
+                            return 1;
+                        }
+
+                        // Mark the number as used in subgrid
+                        subgridUsed[subgridNumber] = true;
+                    }
+                }
+            }
+        }
+
+        cout<<"Valid Sudoku"<<endl;
     }
     else {
         cout<<"File could not be opened."<<endl;
+        return 1;
     }
 
     return 0;
